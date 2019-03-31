@@ -15,12 +15,14 @@
             <img src="sprites/test_paddle.png" width="80"  id="paddle">
     </div>
 
-    <div class="title"><span class="triangle">▶</span> BRICK BREAKER <span class="triangle">◀</span></div>
-    <div class="subtitle">Week 6 Project (Document Object Model) - Max</div>
+    <div class="title">
+        <span class="bracket">[</span> BRICK BREAKER <span class="bracket">]</span>
+    </div>
+    <div class="subtitle">Week 6 JavaScript Project - Max</div>
 
     <canvas id="game_window" width="600" height="600"></canvas>
 
-    <script>    //Javascript
+    <script>
         let canvas = document.getElementById("game_window");
         let ctx = canvas.getContext("2d");
 
@@ -28,6 +30,12 @@
         let brick2_sprite = document.getElementById("brick2");
         let brick1_sprite = document.getElementById("brick1");
         let paddle_sprite = document.getElementById("paddle");
+        
+        let x = canvas.width/2;
+        let y = canvas.height-48;
+        let dx = 3;
+        let dy = -3;
+        let ball_rad = 12;
 
         let paddle_width = 80;
         let paddle_height = 19;
@@ -35,30 +43,24 @@
         let rightPressed = false;
         let leftPressed = false;
 
-        let x = canvas.width/2;
-        let y = canvas.height-30;
-        let dx = 3;
-        let dy = -3;
-        let ball_rad = 8;
-
-        let brick_row_count = 4;
+        let brick_row_count = 3;
         let brick_col_count = 7;
         let brick_width = 64;
         let brick_height = 26;
         let brick_padding = 14;
         let brick_leftoffset = 34;
-        let brick_topoffset = 24;
+        let brick_topoffset = 28;
 
         let score = 0;
 
         //Functions to draw sprites
         function draw_ball() {
-            ctx.drawImage(ball_sprite, x, y);
+            ctx.drawImage(ball_sprite, x - ball_rad, y - ball_rad);
         }
-
         function draw_paddle() {
             ctx.drawImage(paddle_sprite, paddle_x, canvas.height-paddle_height);
         }
+
         //Brick array
         let bricks = [];
         for(let i=0; i<brick_col_count; i++) {
@@ -94,10 +96,10 @@
                     let b = bricks[i][j];
                     
                     if(b.status === 2 || b.status === 1) {
-                        if(x > (b.x + 3)  && x < (b.x + brick_width - 3) && y > b.y && y < b.y+brick_height) {
+                        if( (x + ball_rad > b.x && x < b.x + brick_width + ball_rad) && (y + ball_rad > b.y && y < b.y + brick_height + ball_rad) ) {
                             dy = -dy;
-                            score ++;
                             b.status --;
+                            score ++;
                         }
                     }
                 }
@@ -145,20 +147,45 @@
 
         //Score display
         function display_score() {
-            ctx.font = "12px Roboto Mono, monospace";
-            ctx.fillStyle = "#fa0f0f";
-            ctx.shadowColor = "rgba(255, 20, 0, 0.7)";
-            ctx.shadowBlur = 4;
-            ctx.fillText("SCORE: " + score, 528, 16);
+            ctx.font = "bold 12px Roboto Mono, monospace";
+            ctx.fillStyle = "#DDDDDD";
+            ctx.shadowColor = "rgba(160, 160, 160, 0.5)";
+            ctx.shadowBlur = 2;
+            ctx.fillText(`SCORE: ${score}/42`, 502, 17);
         }
         
+        //Win screen
+        function win_screen() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            dx = 0;
+            dy = 0;
+            draw_ball();
+            draw_paddle();
+            ctx.font = '36px Roboto Mono, monospace';
+            ctx.fillStyle = "#FFFFFF";
+            ctx.fillText("You Win!", 218, canvas.height / 2 - 10);
+        }
+
+        function gameover_screen() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            dx = 0;
+            dy = 0;
+            draw_paddle();
+            ctx.font = '36px Roboto Mono, monospace';
+            ctx.fillStyle = "#FFFFFF";
+            ctx.fillText("Game Over", 202, canvas.height / 2 - 10);
+            ctx.font = '16px Roboto Mono, monospace';
+            ctx.fillStyle = "#b2b2b2";
+            ctx.fillText("Press F5 to restart", 207, canvas.height / 2 + 19);
+        }
 
         //Rendering all objects in the game window
         function render() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            if(score === 56){
+            if(score === brick_row_count * brick_col_count * 2){
                 win_screen();
             }
+
             draw_bricks();
             detect_collision();
             draw_ball();
@@ -170,16 +197,14 @@
             if(y + dy < ball_rad) {
                 dy = -dy;
             }
-            if(y + dy > canvas.height - ball_rad - paddle_height && x > paddle_x - 3 && x < paddle_x + paddle_width + 3) {
+            if(y + dy > canvas.height - ball_rad - paddle_height + 6 && x > paddle_x - 3 && x < paddle_x + paddle_width + 3) {
                 dy = -dy;
                 let ddx = dx_adjust()           
                 dx += ddx;
             }
-            else if(y + dy > canvas.height - ball_rad){
-                alert("Game Over");
-                x = canvas.width/2;
-                y = canvas.height-30;
-                document.location.reload();
+            else if(y + dy > canvas.height - ball_rad + 6){
+                gameover_screen();
+                clearInterval(run_game);
             }
 
             draw_paddle();
@@ -193,20 +218,12 @@
             display_score()
         }
 
-        function win_screen(){
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            dx = 0;
-            dy = 0;
-            draw_ball();
-            draw_paddle();
-            ctx.font = '36px Roboto Mono, monospace';
-            ctx.fillStyle = "#FFFFFF";
-            ctx.fillText("You Win!", 227, canvas.height/2-10 );
-        }
-
         //Run the render function every 10 milliseconds
-        setInterval(render, 10);
+        var run_game = setInterval(render, 10);
     </script>
-    
+
+    <div class="info">
+        Move paddle with <span class="keycode">← left</span> and <span class="keycode">→ right</span> arrow keys.
+    </div>
 </body>
 </html>

@@ -7,7 +7,7 @@
 }
 canvas {
     background: #000; display: block; margin: 0 auto;
-    box-shadow: 0px 0px 8px 4px #f140e3;
+    box-shadow: 0px 0px 9px 4px #d433da;
 }
 
 .sprites {
@@ -20,22 +20,56 @@ canvas {
     color: #ff62f2;
     text-align: center;
     font-size: 1.8rem;
-    letter-spacing: 3px;
-    padding-top: 12px;
+    letter-spacing: 4px;
+    padding-left: 3px;
+    padding-top: 6px;
     text-shadow: 0px 0px 4px #b431e7;
 }
 
-.triangle {
-    color: #f842e9;
-    font-size: 1.4rem;
-    vertical-align: 10%;
-    padding-top: 12px;
-    text-shadow: 0px 0px 4px #ac31dd;
+@keyframes blink_title {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.bracket {
+    color: #ff65f2;
+    font-size: 2.2rem;
+    letter-spacing: 0px;
+    vertical-align: -4%;
+    padding-top: 6px;
+    text-shadow: 0px 0px 4px #e141f7;    
+    animation-duration: 0.7s;
+    animation-name: blink_title;
+    animation-direction: alternate;
+    animation-iteration-count: infinite;
 }
 
 .subtitle {
     color: #dfdfdf;
     text-align: center;
     padding-top: 5px;
-    padding-bottom: 18px;
+    padding-bottom: 16px;
+}
+
+.info {
+    color: #d1d1d1;
+    text-align: center;
+    padding-top: 20px;
+}
+
+.keycode {
+    color: #000000;
+    text-align: center;
+    margin-top: 10px;
+    padding-top: 1px;
+    padding-bottom: 2px;
+    padding-left: 7px;
+    padding-right: 5px;
+    border-width: 3px;
+    border-radius: 6px;
+    background: #c0c0c0;
 }
