@@ -1,0 +1,41 @@
+* {
+    padding: 0;
+    margin: 0;
+    background: #282d33;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 14px;
+}
+canvas {
+    background: #000; display: block; margin: 0 auto;
+    box-shadow: 0px 0px 8px 4px #f140e3;
+}
+
+.sprites {
+    position: fixed;
+    bottom: 0;
+    visibility: hidden;
+}
+
+.title {
+    color: #ff62f2;
+    text-align: center;
+    font-size: 1.8rem;
+    letter-spacing: 3px;
+    padding-top: 12px;
+    text-shadow: 0px 0px 4px #b431e7;
+}
+
+.triangle {
+    color: #f842e9;
+    font-size: 1.4rem;
+    vertical-align: 10%;
+    padding-top: 12px;
+    text-shadow: 0px 0px 4px #ac31dd;
+}
+
+.subtitle {
+    color: #dfdfdf;
+    text-align: center;
+    padding-top: 5px;
+    padding-bottom: 18px;
+}
